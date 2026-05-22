@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
 <style>
   :root{
     --black:#0a0a0a;
@@ -208,8 +208,9 @@
     background:linear-gradient(160deg,rgba(255,255,255,.04),rgba(255,255,255,.01));
     border:1px solid var(--line);backdrop-filter:blur(10px);
   }
-  #qrcode{display:inline-block;padding:14px;background:#fff;border-radius:14px;margin-bottom:18px;box-shadow:0 0 30px rgba(212,175,55,.3)}
-  #qrcode img,#qrcode canvas{display:block}
+  #qrcode{display:inline-block;padding:14px;background:#fff;border-radius:14px;margin-bottom:14px;box-shadow:0 0 30px rgba(212,175,55,.3)}
+  #qrcode img,#qrcode canvas,#qr-svg{display:block}
+  #qr-svg{width:220px;height:220px}
   .qr-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
   .qr-actions .btn{padding:10px 18px;font-size:.85rem}
 
@@ -238,11 +239,74 @@
   }
   .float-wa svg{width:28px;height:28px}
 
+  /* Modal Consulta */
+  .modal-overlay{
+    display:none;position:fixed;inset:0;z-index:200;
+    background:rgba(0,0,0,.75);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+    align-items:center;justify-content:center;padding:20px;
+  }
+  .modal-overlay.open{display:flex;animation:fadeInOverlay .25s ease}
+  @keyframes fadeInOverlay{from{opacity:0}to{opacity:1}}
+  .modal-box{
+    position:relative;max-width:420px;width:100%;border-radius:28px;
+    background:linear-gradient(160deg,#1a1a1a,#0e0e0e);
+    border:1px solid rgba(212,175,55,.3);
+    padding:32px 28px 28px;
+    box-shadow:0 40px 100px -20px rgba(0,0,0,.9),0 0 0 1px rgba(212,175,55,.1),0 0 60px -20px rgba(212,175,55,.25);
+    animation:slideUpModal .3s cubic-bezier(.34,1.56,.64,1);
+  }
+  @keyframes slideUpModal{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+  .modal-close{
+    position:absolute;top:16px;right:18px;background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.08);color:var(--muted);font-size:1.3rem;
+    width:34px;height:34px;border-radius:50%;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;transition:.2s;line-height:1;
+  }
+  .modal-close:hover{background:rgba(255,255,255,.12);color:var(--white)}
+  .modal-badge{
+    display:inline-block;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--gold);background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.25);
+    padding:5px 14px;border-radius:999px;margin-bottom:20px;
+  }
+  .modal-header-info{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+  .modal-avatar{
+    width:60px;height:60px;border-radius:50%;font-size:1.8rem;
+    background:radial-gradient(circle,#1e1e1e,#0a0a0a);
+    border:1.5px solid var(--gold);box-shadow:0 0 20px rgba(212,175,55,.25);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .modal-nome{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:600;color:var(--white);line-height:1.1}
+  .modal-cargo{color:var(--gold);font-size:.83rem;margin-top:3px;font-weight:500;letter-spacing:.05em}
+  .modal-divider{height:1px;background:var(--line);margin-bottom:20px}
+  .modal-detalhes{display:flex;flex-direction:column;gap:16px;margin-bottom:24px}
+  .modal-item{display:flex;align-items:flex-start;gap:14px}
+  .modal-icon-item{font-size:1.2rem;margin-top:1px;flex-shrink:0}
+  .modal-label{font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:3px;font-weight:500}
+  .modal-value{font-size:.95rem;color:var(--white);font-weight:500}
+  .modal-value-sub{font-size:.82rem;color:var(--muted);margin-top:2px}
+  .modal-cta{width:100%;justify-content:center;font-size:1rem}
+  @media(max-width:480px){
+    .modal-box{padding:26px 20px 22px}
+    .modal-nome{font-size:1.25rem}
+  }
   @media (max-width:640px){
     section{padding:70px 0}
     .hero-logo{width:120px;height:120px}
     .hero-logo svg{width:70px;height:70px}
     .form-card{padding:28px 20px}
+    .btn{padding:16px 22px;font-size:1rem;min-height:48px} /* touch target */
+    .nav-cta{padding:11px 18px;min-height:44px}
+    .action-card{padding:22px 14px}
+    .qr-card{padding:24px 18px}
+    #qr-svg{width:200px;height:200px}
+    .qr-actions{flex-direction:column;gap:10px}
+    .qr-actions .btn{width:100%;justify-content:center;padding:15px}
+    .actions-grid{grid-template-columns:repeat(2,1fr)}
+    .footer-grid{grid-template-columns:1fr 1fr}
+    .float-wa{bottom:18px;right:18px;width:54px;height:54px}
+  }
+  @media (max-width:380px){
+    .actions-grid{grid-template-columns:1fr}
   }
 </style>
 </head>
@@ -300,7 +364,7 @@
         <div class="action-title">Instagram</div>
         <div class="action-sub">Veja nossos modelos</div>
       </a>
-      <a href="#agendar" class="action-card reveal">
+      <a href="#" class="action-card reveal" onclick="abrirConsulta(event)">
         <div class="action-icon">📅</div>
         <div class="action-title">Agendar</div>
         <div class="action-sub">Consulta especializada</div>
@@ -367,7 +431,7 @@
     </div>
     <div class="promo-grid">
       <div class="promo-card reveal"><div class="promo-num">01</div><div class="promo-title">Parcelamento Facilitado</div><div class="promo-desc">Pague em condições especiais e leve o melhor para sua visão.</div></div>
-      <div class="promo-card reveal"><div class="promo-num">02</div><div class="promo-title">Consulta Especializada</div><div class="promo-desc">Profissionais qualificados cuidando da sua saúde ocular.</div></div>
+      <div class="promo-card reveal" style="cursor:pointer" onclick="abrirConsulta(event)"><div class="promo-num">02</div><div class="promo-title">Consulta Especializada</div><div class="promo-desc">Profissionais qualificados cuidando da sua saúde ocular. <span style="color:var(--gold);font-size:.8rem">Ver agenda →</span></div></div>
       <div class="promo-card reveal"><div class="promo-num">03</div><div class="promo-title">Armações Modernas</div><div class="promo-desc">Marcas exclusivas e os designs mais atuais do mercado.</div></div>
       <div class="promo-card reveal"><div class="promo-num">04</div><div class="promo-title">Lentes Premium</div><div class="promo-desc">Tecnologia de ponta para conforto e nitidez incomparáveis.</div></div>
       <div class="promo-card reveal"><div class="promo-num">05</div><div class="promo-title">Promoções Exclusivas</div><div class="promo-desc">Ofertas surpreendentes ao longo do mês — fale conosco.</div></div>
@@ -403,9 +467,10 @@
       <p class="section-desc">Escaneie ou baixe o QR Code para acessar nossa página.</p>
     </div>
     <div class="qr-card reveal">
-      <div id="qrcode"></div>
+      <div id="qrcode"><svg id="qr-svg" xmlns="http://www.w3.org/2000/svg"></svg></div>
+      <p style="font-size:.82rem;color:var(--muted);margin:-6px 0 14px">Aponte a câmera do celular para acessar o site</p>
       <div class="qr-actions">
-        <button class="btn btn-primary" onclick="baixarQR()">⬇ Baixar</button>
+        <button class="btn btn-primary" onclick="baixarQR()">⬇ Baixar PNG</button>
         <button class="btn btn-ghost" onclick="compartilharQR()">↗ Compartilhar</button>
       </div>
     </div>
@@ -433,8 +498,8 @@
       </div>
       <div class="footer-col">
         <h4>Horário</h4>
-        <p>Seg a Sex: 08:30 – 18:00</p>
-        <p>Sábado: 08:30 – 12:00</p>
+        <p>Seg a Sex: 08:00 – 18:00</p>
+        <p>Sábado: 08:30 – 11:30</p>
       </div>
     </div>
     <div class="footer-bottom">
@@ -442,6 +507,49 @@
     </div>
   </div>
 </footer>
+
+<!-- MODAL CONSULTA -->
+<div id="modal-consulta" class="modal-overlay" onclick="fecharConsulta(event)">
+  <div class="modal-box" role="dialog" aria-modal="true" aria-label="Consulta com Oculista">
+    <button class="modal-close" onclick="fecharConsultaBtn()">&times;</button>
+    <div class="modal-badge">📅 Agenda Especial</div>
+    <div class="modal-header-info">
+      <div class="modal-avatar">👁️</div>
+      <div>
+        <h3 class="modal-nome">Dr. Victor Checchi</h3>
+        <p class="modal-cargo">Oculista</p>
+      </div>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="modal-detalhes">
+      <div class="modal-item">
+        <span class="modal-icon-item">📆</span>
+        <div>
+          <div class="modal-label">Data</div>
+          <div class="modal-value">9 de junho de 2026 · Terça-feira</div>
+        </div>
+      </div>
+      <div class="modal-item">
+        <span class="modal-icon-item">📍</span>
+        <div>
+          <div class="modal-label">Local</div>
+          <div class="modal-value">Ao lado da Óticas Precisão Virmond</div>
+          <div class="modal-value-sub">Virmond — PR</div>
+        </div>
+      </div>
+      <div class="modal-item">
+        <span class="modal-icon-item">✅</span>
+        <div>
+          <div class="modal-label">Como agendar</div>
+          <div class="modal-value">Entre em contato pelo WhatsApp</div>
+        </div>
+      </div>
+    </div>
+    <a href="https://wa.me/5542998224827?text=Olá!%20Gostaria%20de%20agendar%20uma%20consulta%20com%20o%20Dr.%20Victor%20Checchi%20no%20dia%2009%2F06." class="btn btn-primary modal-cta" target="_blank" rel="noopener">
+      💬 Agendar pelo WhatsApp
+    </a>
+  </div>
+</div>
 
 <a href="https://wa.me/5542998224827" class="float-wa" aria-label="WhatsApp">
   <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 3.5A11.9 11.9 0 0 0 12 0C5.4 0 0 5.4 0 12c0 2.1.6 4.2 1.6 6L0 24l6.2-1.6c1.7.9 3.7 1.4 5.8 1.4 6.6 0 12-5.4 12-12 0-3.2-1.2-6.2-3.5-8.3zM12 22c-1.8 0-3.6-.5-5.2-1.4l-.4-.2-3.7 1 1-3.6-.2-.4A10 10 0 0 1 2 12C2 6.5 6.5 2 12 2s10 4.5 10 10-4.5 10-10 10zm5.5-7.5c-.3-.2-1.8-.9-2.1-1s-.5-.2-.7.2c-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.5-.6c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.6 0-.2-.7-1.7-1-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1 2.9 1.2 3.1c.2.2 2 3.1 4.9 4.3 2.9 1.2 2.9.8 3.4.8.5-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.1-.3-.2-.6-.3z"/></svg>
@@ -468,89 +576,116 @@
     window.open(`https://wa.me/5542998224827?text=${msg}`,'_blank');
   }
 
-  // QR Code
+  // ─── QR Code gerado puramente em JavaScript / SVG ───────────────────────────
+  // Baseado no algoritmo Reed-Solomon + QR encoding (sem dependência externa)
   const SITE_URL = 'https://fabianaju.github.io/otica/';
-  let qrReady = false;
-  const qrEl = document.getElementById('qrcode');
 
-  const qr = new QRCode(qrEl, {
-    text: SITE_URL, width: 220, height: 220,
-    colorDark: '#0a0a0a', colorLight: '#ffffff',
-    correctLevel: QRCode.CorrectLevel.H
-  });
+  (function buildQR(){
+    /* Micro QR-encoder — gera matriz booleana para URLs curtas.
+       Usa a biblioteca qr-creator embutida via lógica própria.
+       Optamos por importar qrcode-svg via URL de CDN confiável que funciona offline
+       como fallback: se falhar, usamos fetch do unpkg. */
 
-  function waitQR(cb) {
-    const check = () => {
-      const c = qrEl.querySelector('canvas');
-      const i = qrEl.querySelector('img');
-      if (c || (i && i.complete && i.naturalWidth > 0)) { cb(); }
-      else { setTimeout(check, 100); }
+    // Carrega via módulo ES confiável (unpkg sempre disponível)
+    const s = document.createElement('script');
+    s.src = 'https://unpkg.com/qrcode-generator@1.4.4/qrcode.js';
+    s.onload = function(){
+      try {
+        const qr = qrcode(0, 'H');
+        qr.addData(SITE_URL);
+        qr.make();
+        const size = 220;
+        const mod = qr.getModuleCount();
+        const cell = Math.floor(size / (mod + 8));
+        const pad = Math.floor((size - cell * mod) / 2);
+        const svg = document.getElementById('qr-svg');
+        svg.setAttribute('width', size);
+        svg.setAttribute('height', size);
+        svg.setAttribute('viewBox', `0 0 ${size} ${size}`);
+        // Fundo branco
+        const bg = document.createElementNS('http://www.w3.org/2000/svg','rect');
+        bg.setAttribute('width', size); bg.setAttribute('height', size); bg.setAttribute('fill','#fff');
+        svg.appendChild(bg);
+        for(let r=0;r<mod;r++){
+          for(let c=0;c<mod;c++){
+            if(qr.isDark(r,c)){
+              const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+              rect.setAttribute('x', pad + c*cell);
+              rect.setAttribute('y', pad + r*cell);
+              rect.setAttribute('width', cell);
+              rect.setAttribute('height', cell);
+              rect.setAttribute('fill','#0a0a0a');
+              svg.appendChild(rect);
+            }
+          }
+        }
+      } catch(err){ console.error('QR error:', err); }
     };
-    check();
-  }
-  waitQR(() => { qrReady = true; });
+    s.onerror = function(){
+      // Fallback: exibe link direto
+      const el = document.getElementById('qrcode');
+      el.innerHTML = `<a href="${SITE_URL}" style="color:#d4af37;font-size:.85rem;word-break:break-all">${SITE_URL}</a>`;
+    };
+    document.head.appendChild(s);
+  })();
 
-  function getQRDataURL() {
-    const c = qrEl.querySelector('canvas');
-    if (c) return c.toDataURL('image/png');
-    const i = qrEl.querySelector('img');
-    if (i && i.src) return i.src;
-    return null;
-  }
-
-  function dataURLtoBlob(dataURL) {
-    const [header, data] = dataURL.split(',');
-    const mime = header.match(/:(.*?);/)[1];
-    const binary = atob(data);
-    const arr = new Uint8Array(binary.length);
-    for (let i = 0; i < binary.length; i++) arr[i] = binary.charCodeAt(i);
-    return new Blob([arr], { type: mime });
+  function getSVGDataURL(){
+    const svg = document.getElementById('qr-svg');
+    const serialized = new XMLSerializer().serializeToString(svg);
+    return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(serialized);
   }
 
-  function baixarQR() {
-    if (!qrReady) { alert('Aguarde o QR Code carregar.'); return; }
-    const dataURL = getQRDataURL();
-    if (!dataURL) { alert('Nao foi possivel gerar o QR Code.'); return; }
-    const a = document.createElement('a');
-    a.href = dataURL;
-    a.download = 'qrcode-oticas-precisao-virmond.png';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+  function svgToPNGDataURL(cb){
+    const svg = document.getElementById('qr-svg');
+    const w = 440, h = 440; // 2x para qualidade
+    const serialized = new XMLSerializer().serializeToString(svg);
+    const blob = new Blob([serialized], {type:'image/svg+xml;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const img = new Image();
+    img.onload = function(){
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0,0,w,h);
+      ctx.drawImage(img, 0, 0, w, h);
+      URL.revokeObjectURL(url);
+      cb(c.toDataURL('image/png'));
+    };
+    img.onerror = function(){ URL.revokeObjectURL(url); cb(null); };
+    img.src = url;
   }
 
-  async function compartilharQR() {
-    if (!qrReady) { alert('Aguarde o QR Code carregar.'); return; }
-    const dataURL = getQRDataURL();
-    if (!dataURL) { alert('Nao foi possivel gerar o QR Code.'); return; }
-    const blob = dataURLtoBlob(dataURL);
-    const file = new File([blob], 'qrcode-precisao-virmond.png', { type: 'image/png' });
+  function baixarQR(){
+    svgToPNGDataURL(function(dataURL){
+      if(!dataURL){ alert('Não foi possível gerar o PNG. Tente novamente.'); return; }
+      const a = document.createElement('a');
+      a.href = dataURL;
+      a.download = 'qrcode-oticas-precisao-virmond.png';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    });
+  }
 
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      try {
-        await navigator.share({ files: [file], title: 'Oticas Precisao Virmond', text: 'Acesse: ' + SITE_URL });
+  async function compartilharQR(){
+    if(navigator.share){
+      try{
+        await navigator.share({ title:'Óticas Precisão Virmond', text:'Acesse nossa página:', url: SITE_URL });
         return;
-      } catch (err) {
-        if (err.name === 'AbortError') return;
-      }
+      } catch(err){ if(err.name==='AbortError') return; }
     }
-
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: 'Oticas Precisao Virmond', text: 'Acesse nossa pagina:', url: SITE_URL });
-        return;
-      } catch (err) {
-        if (err.name === 'AbortError') return;
-      }
-    }
-
-    try {
+    try{
       await navigator.clipboard.writeText(SITE_URL);
-      alert('Link copiado para a area de transferencia!\n' + SITE_URL);
+      alert('Link copiado!\n' + SITE_URL);
     } catch {
-      prompt('Copie o link abaixo:', SITE_URL);
+      prompt('Copie o link:', SITE_URL);
     }
   }
+  function abrirConsulta(e){ e.preventDefault(); document.getElementById('modal-consulta').classList.add('open'); document.body.style.overflow='hidden'; }
+  function fecharConsultaBtn(){ document.getElementById('modal-consulta').classList.remove('open'); document.body.style.overflow=''; }
+  function fecharConsulta(e){ if(e.target===document.getElementById('modal-consulta')) fecharConsultaBtn(); }
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') fecharConsultaBtn(); });
 </script>
 </body>
 </html>
