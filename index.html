@@ -922,18 +922,21 @@
   .footer-qr-container { align-items: center; text-align: center; }
 
   .footer-qr-box {
-    background: #ffffff;
-    padding: 10px;
+    background: #ffffff !important;
+    padding: 14px;
     border-radius: 14px;
-    border: 1px solid var(--gold);
+    border: 2px solid var(--gold);
     box-shadow: 0 10px 30px rgba(212, 175, 55, 0.15);
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     transition: var(--transition);
     margin-bottom: 8px;
+    line-height: 0;
   }
 
   .footer-qr-box:hover { transform: scale(1.03); box-shadow: 0 15px 35px rgba(212, 175, 55, 0.3); }
-  .footer-qr-box svg { display: block; width: 120px; height: 120px; }
+  .footer-qr-box svg { display: block; width: 148px; height: 148px; border-radius: 4px; }
   .footer-qr-text { font-size: 0.78rem; color: var(--text-muted); margin-top: 6px; line-height: 1.4; }
   .footer-qr-btn { margin-top: 12px; padding: 8px 18px; font-size: 0.8rem; border-radius: 20px; }
 
@@ -1748,27 +1751,33 @@
         qr.addData(QR_TARGET_URL);
         qr.make();
         
-        const size = 200;
+        const quietZone = 4;          // módulos de margem branca (padrão ISO)
         const mod = qr.getModuleCount();
-        const cell = size / mod;
+        const totalMod = mod + quietZone * 2;
+        const cell = 200 / totalMod;  // tamanho de cada módulo
+        const size = totalMod * cell; // = 200
+        const offset = quietZone * cell;
+
         const svg = document.getElementById('qr-svg');
         
         svg.setAttribute('width', size);
         svg.setAttribute('height', size);
         svg.setAttribute('viewBox', `0 0 ${size} ${size}`);
         
+        // Fundo branco que cobre o SVG inteiro, incluindo a quiet zone
         const bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
         bg.setAttribute('width', size);
         bg.setAttribute('height', size);
         bg.setAttribute('fill', '#ffffff');
         svg.appendChild(bg);
         
+        // Módulos escuros deslocados pela quiet zone
         for (let r = 0; r < mod; r++) {
           for (let c = 0; c < mod; c++) {
             if (qr.isDark(r, c)) {
               const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-              rect.setAttribute('x', c * cell);
-              rect.setAttribute('y', r * cell);
+              rect.setAttribute('x', offset + c * cell);
+              rect.setAttribute('y', offset + r * cell);
               rect.setAttribute('width', cell + 0.1);
               rect.setAttribute('height', cell + 0.1);
               rect.setAttribute('fill', '#060606');
