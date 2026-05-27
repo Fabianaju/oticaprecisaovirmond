@@ -915,9 +915,123 @@ footer.elegant-footer {
   .footer-col h4::after { left: 50%; transform: translateX(-50%); }
   .footer-social-icons { justify-content: center; }
 }
+
+/* ─── NAVBAR ─── */
+.catalogo-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(6,6,6,0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--line);
+  padding: 14px 0;
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.nav-logo img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--gold);
+}
+
+.nav-logo span {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-main);
+  letter-spacing: 0.3px;
+}
+
+.nav-cart-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(212,175,55,0.08);
+  border: 1px solid var(--border-gold);
+  border-radius: 40px;
+  padding: 9px 18px;
+  color: var(--gold-2);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: 'Inter', sans-serif;
+}
+
+.nav-cart-btn:hover {
+  background: rgba(212,175,55,0.16);
+  border-color: var(--gold);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(212,175,55,0.2);
+}
+
+.nav-cart-btn i { font-size: 1rem; color: var(--gold); }
+
+.nav-cart-badge {
+  background: linear-gradient(135deg, #f5d97a, #d4af37);
+  color: var(--black);
+  font-size: 0.62rem;
+  font-weight: 800;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: var(--transition);
+}
+
+.nav-cart-badge.visivel {
+  opacity: 1;
+  transform: scale(1);
+}
+
+@media (max-width: 480px) {
+  .nav-logo span { display: none; }
+  .nav-cart-btn .cart-label { display: none; }
+  .nav-cart-btn { padding: 9px 12px; }
+}
 </style>
 </head>
 <body>
+
+<!-- ─── NAVBAR ─── -->
+<nav class="catalogo-nav">
+  <div class="container nav-inner">
+    <a class="nav-logo" href="#">
+      <img src="https://fabianaju.github.io/otica-reserva-do-iguacu/logo.jpeg" alt="Óticas Precisão"/>
+      <span>Óticas Precisão <span class="gold-text">Virmond</span></span>
+    </a>
+    <button class="nav-cart-btn" onclick="abrirCarrinho()">
+      <i class="fas fa-shopping-bag"></i>
+      <span class="cart-label">Carrinho</span>
+      <span class="nav-cart-badge" id="nav-cart-badge">0</span>
+    </button>
+  </div>
+</nav>
 
 <!-- ─── SEÇÃO CATÁLOGO ─── -->
 <section id="catalogo" style="padding: 40px 0 120px;">
@@ -1061,15 +1175,6 @@ footer.elegant-footer {
 // ─── PRODUTOS ───
 const produtos = [
   {
-    id: 1,
-    nome: "Armação Titanium Slim",
-    categoria: "Armações",
-    desc: "Ultraleve em titânio, design minimalista europeu. Perfeita para uso diário.",
-    emoji: "🕶️",
-    imagem: null,
-    topVendido: true
-  },
-  {
     id: 2,
     nome: "Óculos Solar Aviador Gold",
     categoria: "Solar",
@@ -1077,15 +1182,6 @@ const produtos = [
     emoji: "😎",
     imagem: null,
     topVendido: true
-  },
-  {
-    id: 4,
-    nome: "Armação Acetato Retrô",
-    categoria: "Armações",
-    desc: "Acetato italiano de alta qualidade. Visual vintage, acabamento impecável.",
-    emoji: "👓",
-    imagem: null,
-    topVendido: false
   },
   {
     id: 5,
@@ -1166,6 +1262,33 @@ const produtos = [
     desc: "Design moderno com materiais de alta qualidade. Estilo e funcionalidade para o dia a dia.",
     emoji: "⌚",
     imagem: "https://raw.githubusercontent.com/Fabianaju/oticaprecisaovirmond/main/relogio3.jpeg",
+    topVendido: false
+  },
+  {
+    id: 15,
+    nome: "Armação 1",
+    categoria: "Armações",
+    desc: "Armação sofisticada com design moderno e acabamento premium. Conforto e estilo para o dia a dia.",
+    emoji: "👓",
+    imagem: "https://raw.githubusercontent.com/Fabianaju/oticaprecisaovirmond/main/armacao1.jpeg",
+    topVendido: false
+  },
+  {
+    id: 16,
+    nome: "Armação 2",
+    categoria: "Armações",
+    desc: "Design elegante com materiais de alta qualidade. Leveza e durabilidade em um único modelo.",
+    emoji: "👓",
+    imagem: "https://raw.githubusercontent.com/Fabianaju/oticaprecisaovirmond/main/armacao2.jpeg",
+    topVendido: false
+  },
+  {
+    id: 17,
+    nome: "Armação 3",
+    categoria: "Armações",
+    desc: "Estilo contemporâneo com acabamento refinado. Perfeita para complementar qualquer visual.",
+    emoji: "👓",
+    imagem: "https://raw.githubusercontent.com/Fabianaju/oticaprecisaovirmond/main/armacao3.jpeg",
     topVendido: false
   }
 ];
@@ -1273,13 +1396,17 @@ function atualizarBadge() {
   const total = carrinho.reduce((s, i) => s + i.qty, 0);
   const badge = document.getElementById('carrinho-badge');
   const fab = document.getElementById('carrinho-fab');
+  const navBadge = document.getElementById('nav-cart-badge');
 
   badge.textContent = total;
+  navBadge.textContent = total;
 
   if (total > 0) {
     fab.classList.remove('oculto');
+    navBadge.classList.add('visivel');
   } else {
     fab.classList.add('oculto');
+    navBadge.classList.remove('visivel');
   }
 }
 
