@@ -771,7 +771,7 @@ body::after {
       <button class="filtro-btn ativo" data-cat="todos" onclick="filtrar(this)">Todos</button>
       <button class="filtro-btn" data-cat="Armações" onclick="filtrar(this)">Armações</button>
       <button class="filtro-btn" data-cat="Solar" onclick="filtrar(this)">Solar</button>
-      <button class="filtro-btn" data-cat="Smartwatch" onclick="filtrar(this)">Smartwatch</button>
+      <button class="filtro-btn" data-cat="Relógios" onclick="filtrar(this)">Relógios</button>
       <button class="filtro-btn" data-cat="Lentes" onclick="filtrar(this)">Lentes</button>
       <button class="filtro-btn" data-cat="Acessórios" onclick="filtrar(this)">Acessórios</button>
     </div>
@@ -812,16 +812,8 @@ body::after {
 
     <div class="carrinho-foot">
       <div class="resumo-linha">
-        <span class="label">Subtotal</span>
-        <span class="valor" id="subtotal-val">R$ 0,00</span>
-      </div>
-      <div class="resumo-linha">
-        <span class="label">Itens</span>
+        <span class="label">Itens no carrinho</span>
         <span class="valor" id="itens-val">0 produto(s)</span>
-      </div>
-      <div class="resumo-linha total">
-        <span class="label">Total</span>
-        <span class="valor" id="total-val">R$ 0,00</span>
       </div>
 
       <button class="btn-enviar-whats" id="btn-enviar-whats" onclick="enviarPedidoWhats()" disabled>
@@ -848,8 +840,8 @@ const produtos = [
     nome: "Armação Titanium Slim",
     categoria: "Armações",
     desc: "Ultraleve em titânio, design minimalista europeu. Perfeita para uso diário.",
-    preco: 589.00,
     emoji: "🕶️",
+    imagem: null,
     topVendido: true
   },
   {
@@ -857,17 +849,17 @@ const produtos = [
     nome: "Óculos Solar Aviador Gold",
     categoria: "Solar",
     desc: "Lentes polarizadas UV400 com armação dourada. Elegância atemporal.",
-    preco: 420.00,
     emoji: "😎",
+    imagem: null,
     topVendido: true
   },
   {
     id: 3,
     nome: "Smartwatch Premium Pro",
-    categoria: "Smartwatch",
+    categoria: "Relógios",
     desc: "Monitor cardíaco, GPS integrado e 7 dias de bateria. Estilo e tecnologia.",
-    preco: 1290.00,
     emoji: "⌚",
+    imagem: null,
     topVendido: false
   },
   {
@@ -875,8 +867,8 @@ const produtos = [
     nome: "Armação Acetato Retrô",
     categoria: "Armações",
     desc: "Acetato italiano de alta qualidade. Visual vintage, acabamento impecável.",
-    preco: 399.00,
     emoji: "👓",
+    imagem: null,
     topVendido: false
   },
   {
@@ -884,8 +876,8 @@ const produtos = [
     nome: "Lentes Progressivas HD",
     categoria: "Lentes",
     desc: "Tecnologia de última geração. Visão nítida em todas as distâncias.",
-    preco: 750.00,
     emoji: "🔬",
+    imagem: null,
     topVendido: true
   },
   {
@@ -893,17 +885,17 @@ const produtos = [
     nome: "Óculos Solar Cat Eye",
     categoria: "Solar",
     desc: "Design feminino sofisticado com proteção total UV. Tendência da estação.",
-    preco: 310.00,
     emoji: "🌸",
+    imagem: null,
     topVendido: false
   },
   {
     id: 7,
     nome: "Smartwatch Sport Elite",
-    categoria: "Smartwatch",
+    categoria: "Relógios",
     desc: "À prova d'água 50m, notificações e modo multi-esporte avançado.",
-    preco: 890.00,
     emoji: "🏃",
+    imagem: null,
     topVendido: false
   },
   {
@@ -911,8 +903,8 @@ const produtos = [
     nome: "Estojo Premium Couro",
     categoria: "Acessórios",
     desc: "Estojo em couro legítimo com proteção total para suas armações.",
-    preco: 89.00,
     emoji: "👜",
+    imagem: null,
     topVendido: false
   },
   {
@@ -920,8 +912,26 @@ const produtos = [
     nome: "Kit Limpeza Óptico",
     categoria: "Acessórios",
     desc: "Solução profissional, flanela de microfibra e spray antiembaçante.",
-    preco: 49.00,
     emoji: "✨",
+    imagem: null,
+    topVendido: false
+  },
+  {
+    id: 10,
+    nome: "Relógio Smart 1",
+    categoria: "Relógios",
+    desc: "Relógio inteligente com design moderno, monitoramento de saúde e longa duração de bateria.",
+    emoji: "⌚",
+    imagem: "https://raw.githubusercontent.com/Fabianaju/oticaprecisaovirmond/main/smart1.jpeg",
+    topVendido: true
+  },
+  {
+    id: 11,
+    nome: "Relógio Smart 2",
+    categoria: "Relógios",
+    desc: "Smartwatch elegante com tela AMOLED, GPS e monitoramento completo de atividades.",
+    emoji: "⌚",
+    imagem: "https://raw.githubusercontent.com/Fabianaju/oticaprecisaovirmond/main/smart2.jpeg",
     topVendido: false
   }
 ];
@@ -941,22 +951,21 @@ function renderGrid(cat) {
 
   grid.innerHTML = lista.map(p => {
     const noCart = carrinho.find(c => c.id === p.id);
+    const imgHtml = p.imagem
+      ? `<img src="${p.imagem}" alt="${p.nome}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" /><span class="produto-emoji" style="display:none">${p.emoji}</span>`
+      : `<span class="produto-emoji">${p.emoji}</span>`;
     return `
     <div class="produto-card reveal" data-id="${p.id}">
       ${p.topVendido ? `<span class="badge-top"><i class="fas fa-fire"></i> Mais Vendido</span>` : ''}
       <div class="produto-img">
-        <span class="produto-emoji">${p.emoji}</span>
+        ${imgHtml}
       </div>
       <div class="produto-info">
         <div class="produto-categoria">${p.categoria}</div>
         <div class="produto-nome">${p.nome}</div>
         <div class="produto-desc">${p.desc}</div>
         <div class="produto-rodape">
-          <div class="produto-preco">
-            <span class="produto-preco-label">Preço</span>
-            <span class="produto-preco-valor">${fmt(p.preco)}</span>
-          </div>
-          <div class="card-btns">
+          <div class="card-btns" style="flex-direction:row; align-items:center; width:100%; justify-content:flex-end; gap:8px;">
             <button class="btn-whats-rapido" onclick="comprarRapido(${p.id})">
               <i class="fab fa-whatsapp"></i> Comprar
             </button>
@@ -1020,8 +1029,7 @@ function comprarRapido(id) {
   const p = produtos.find(x => x.id === id);
   const msg = `Olá! Gostaria de saber mais sobre:\n\n` +
     `*${p.nome}*\n` +
-    `Categoria: ${p.categoria}\n` +
-    `Valor: ${fmt(p.preco)}\n\n` +
+    `Categoria: ${p.categoria}\n\n` +
     `Pode me ajudar com mais informações?`;
   window.open(`https://wa.me/5542998224827?text=${encodeURIComponent(msg)}`, '_blank');
 }
@@ -1060,11 +1068,10 @@ function renderCarrinho() {
 
   lista.innerHTML = carrinho.map(item => `
     <div class="carrinho-item" id="item-${item.id}">
-      <div class="item-emoji-mini">${item.emoji}</div>
+      <div class="item-emoji-mini">${item.imagem ? `<img src="${item.imagem}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;" onerror="this.style.display='none'">` : item.emoji}</div>
       <div class="item-info">
         <div class="item-nome">${item.nome}</div>
         <div class="item-cat">${item.categoria}</div>
-        <div class="item-preco">${fmt(item.preco * item.qty)}</div>
       </div>
       <div class="item-qty">
         <button class="qty-btn" onclick="alterarQty(${item.id}, -1)"><i class="fas fa-minus"></i></button>
@@ -1081,10 +1088,7 @@ function renderCarrinho() {
 }
 
 function atualizarTotais() {
-  const total = carrinho.reduce((s, i) => s + i.preco * i.qty, 0);
   const itens = carrinho.reduce((s, i) => s + i.qty, 0);
-  document.getElementById('subtotal-val').textContent = fmt(total);
-  document.getElementById('total-val').textContent = fmt(total);
   document.getElementById('itens-val').textContent = `${itens} produto(s)`;
 }
 
@@ -1145,17 +1149,15 @@ function enviarPedidoWhats() {
   if (carrinho.length === 0) return;
 
   const itens = carrinho.map(i =>
-    `▸ *${i.nome}* (${i.categoria}) × ${i.qty} — ${fmt(i.preco * i.qty)}`
+    `▸ *${i.nome}* (${i.categoria}) × ${i.qty}`
   ).join('\n');
 
-  const total = carrinho.reduce((s, i) => s + i.preco * i.qty, 0);
   const qtdTotal = carrinho.reduce((s, i) => s + i.qty, 0);
 
   const msg =
     `Olá! Gostaria de fazer um pedido na *Ótica Precisão de Virmond* 🕶️\n\n` +
     `📋 *Meu Pedido:*\n${itens}\n\n` +
-    `🛍️ Total de itens: ${qtdTotal}\n` +
-    `💰 *Valor total: ${fmt(total)}*\n\n` +
+    `🛍️ Total de itens: ${qtdTotal}\n\n` +
     `Poderia me ajudar a finalizar? Obrigado!`;
 
   window.open(`https://wa.me/5542998224827?text=${encodeURIComponent(msg)}`, '_blank');
