@@ -529,6 +529,17 @@ body::after {
   to { opacity: 1; transform: translateX(0); }
 }
 
+@keyframes fadeOutItem {
+  from { opacity: 1; transform: translateX(0); max-height: 100px; margin: 0; padding: 14px 0; }
+  to { opacity: 0; transform: translateX(30px); max-height: 0; margin: 0; padding: 0; }
+}
+
+.carrinho-item.removendo {
+  animation: fadeOutItem 0.28s ease forwards;
+  overflow: hidden;
+  pointer-events: none;
+}
+
 .item-emoji-mini {
   width: 54px;
   height: 54px;
@@ -567,6 +578,14 @@ body::after {
   font-weight: 700;
   color: var(--gold-2);
   white-space: nowrap;
+}
+
+.item-subtotal {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  text-align: right;
+  margin-top: 2px;
 }
 
 /* CONTROLE QTDE */
@@ -1062,13 +1081,6 @@ footer.elegant-footer {
   </div>
 </section>
 
-<!-- ─── CARRINHO FAB ─── -->
-<button class="carrinho-fab oculto" id="carrinho-fab" onclick="abrirCarrinho()">
-  <i class="fas fa-shopping-bag fab-icon"></i>
-  <span>Carrinho</span>
-  <span class="carrinho-badge" id="carrinho-badge">0</span>
-</button>
-
 <!-- ─── PAINEL CARRINHO ─── -->
 <div class="carrinho-overlay" id="carrinho-overlay" onclick="fecharCarrinhoFora(event)">
   <aside class="carrinho-painel">
@@ -1095,13 +1107,17 @@ footer.elegant-footer {
         <span class="label">Itens no carrinho</span>
         <span class="valor" id="itens-val">0 produto(s)</span>
       </div>
+      <div class="resumo-linha total">
+        <span class="label">Total estimado</span>
+        <span class="valor" id="total-val" style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;background:linear-gradient(135deg,#f5d97a,#d4af37);-webkit-background-clip:text;background-clip:text;color:transparent;">A consultar</span>
+      </div>
 
       <button class="btn-enviar-whats" id="btn-enviar-whats" onclick="enviarPedidoWhats()" disabled>
         <i class="fab fa-whatsapp" style="font-size:1.2rem;"></i>
         Finalizar no WhatsApp
       </button>
 
-      <button class="btn-limpar" onclick="limparCarrinho()">
+      <button class="btn-limpar" onclick="confirmarLimpar()">
         <i class="fas fa-trash-alt"></i> Limpar carrinho
       </button>
     </div>
@@ -1304,8 +1320,13 @@ const produtos = [
   }
 ];
 
-let carrinho = [];
+let carrinho = JSON.parse(localStorage.getItem('otica_carrinho') || '[]');
 let catAtual = "todos";
+
+// ─── SALVAR CARRINHO ───
+function salvarCarrinho() {
+  localStorage.setItem('otica_carrinho', JSON.stringify(carrinho));
+}
 
 // ─── FORMATAR PREÇO ───
 function fmt(v) {
@@ -1378,6 +1399,7 @@ function addCarrinho(id) {
   renderCarrinho();
   atualizarBtnCard(id, true);
   showToast(`✓ ${p.nome} adicionado ao carrinho`);
+  salvarCarrinho();
 }
 
 function atualizarBtnCard(id, add) {
@@ -1405,18 +1427,12 @@ function comprarRapido(id) {
 // ─── ATUALIZAR BADGE ───
 function atualizarBadge() {
   const total = carrinho.reduce((s, i) => s + i.qty, 0);
-  const badge = document.getElementById('carrinho-badge');
-  const fab = document.getElementById('carrinho-fab');
   const navBadge = document.getElementById('nav-cart-badge');
-
-  badge.textContent = total;
   navBadge.textContent = total;
 
   if (total > 0) {
-    fab.classList.remove('oculto');
     navBadge.classList.add('visivel');
   } else {
-    fab.classList.add('oculto');
     navBadge.classList.remove('visivel');
   }
 }
@@ -1438,23 +1454,31 @@ function renderCarrinho() {
 
   btnEnviar.disabled = false;
 
-  lista.innerHTML = carrinho.map(item => `
+  lista.innerHTML = carrinho.map(item => {
+    const temPreco = item.preco && item.preco > 0;
+    const precoUnitario = temPreco ? fmt(item.preco) : 'A consultar';
+    const precoSubtotal = temPreco ? fmt(item.preco * item.qty) : '';
+    return `
     <div class="carrinho-item" id="item-${item.id}">
       <div class="item-emoji-mini">${item.imagem ? `<img src="${item.imagem}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;" onerror="this.style.display='none'">` : item.emoji}</div>
       <div class="item-info">
         <div class="item-nome">${item.nome}</div>
         <div class="item-cat">${item.categoria}</div>
+        <div class="item-preco">${precoUnitario}</div>
       </div>
       <div class="item-qty">
         <button class="qty-btn" onclick="alterarQty(${item.id}, -1)"><i class="fas fa-minus"></i></button>
         <span class="qty-num">${item.qty}</span>
         <button class="qty-btn" onclick="alterarQty(${item.id}, 1)"><i class="fas fa-plus"></i></button>
       </div>
-      <button class="btn-remover" onclick="removerItem(${item.id})" title="Remover">
-        <i class="fas fa-trash-alt"></i>
-      </button>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;">
+        ${precoSubtotal ? `<span class="item-subtotal">= ${precoSubtotal}</span>` : ''}
+        <button class="btn-remover" onclick="removerItemAnimado(${item.id})" title="Remover">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+      </div>
     </div>
-  `).join('');
+  `}).join('');
 
   atualizarTotais();
 }
@@ -1462,6 +1486,22 @@ function renderCarrinho() {
 function atualizarTotais() {
   const itens = carrinho.reduce((s, i) => s + i.qty, 0);
   document.getElementById('itens-val').textContent = `${itens} produto(s)`;
+
+  const totalEl = document.getElementById('total-val');
+  const todosTemPreco = carrinho.every(i => i.preco && i.preco > 0);
+  const algumTemPreco = carrinho.some(i => i.preco && i.preco > 0);
+
+  if (carrinho.length === 0) {
+    totalEl.textContent = 'A consultar';
+  } else if (todosTemPreco) {
+    const total = carrinho.reduce((s, i) => s + i.preco * i.qty, 0);
+    totalEl.textContent = fmt(total);
+  } else if (algumTemPreco) {
+    const parcial = carrinho.filter(i => i.preco).reduce((s, i) => s + i.preco * i.qty, 0);
+    totalEl.textContent = fmt(parcial) + ' + consulta';
+  } else {
+    totalEl.textContent = 'A consultar';
+  }
 }
 
 // ─── ALTERAR QUANTIDADE ───
@@ -1470,24 +1510,68 @@ function alterarQty(id, delta) {
   if (!item) return;
   item.qty += delta;
   if (item.qty <= 0) {
-    removerItem(id);
+    removerItemAnimado(id);
     return;
   }
+  salvarCarrinho();
   atualizarBadge();
   renderCarrinho();
+}
+
+// ─── REMOVER COM ANIMAÇÃO ───
+function removerItemAnimado(id) {
+  const el = document.getElementById(`item-${id}`);
+  if (el) {
+    el.classList.add('removendo');
+    el.addEventListener('animationend', () => removerItem(id), { once: true });
+  } else {
+    removerItem(id);
+  }
 }
 
 // ─── REMOVER ITEM ───
 function removerItem(id) {
   carrinho = carrinho.filter(x => x.id !== id);
+  salvarCarrinho();
   atualizarBadge();
   renderCarrinho();
   atualizarBtnCard(id, false);
 }
 
+// ─── CONFIRMAR LIMPAR ───
+function confirmarLimpar() {
+  if (carrinho.length === 0) return;
+  const btn = document.getElementById('btn-limpar-confirmar') || (() => {
+    // Mostra confirmação inline no botão
+    const btnLimpar = document.querySelector('.btn-limpar');
+    if (!btnLimpar) return null;
+    const textoOriginal = btnLimpar.innerHTML;
+    btnLimpar.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Confirmar limpeza?';
+    btnLimpar.style.borderColor = 'rgba(255,100,100,0.7)';
+    btnLimpar.style.color = 'rgba(255,100,100,0.9)';
+    btnLimpar.onclick = () => {
+      limparCarrinho();
+      btnLimpar.innerHTML = textoOriginal;
+      btnLimpar.style.borderColor = '';
+      btnLimpar.style.color = '';
+      btnLimpar.onclick = () => confirmarLimpar();
+    };
+    setTimeout(() => {
+      if (btnLimpar.innerHTML.includes('Confirmar')) {
+        btnLimpar.innerHTML = textoOriginal;
+        btnLimpar.style.borderColor = '';
+        btnLimpar.style.color = '';
+        btnLimpar.onclick = () => confirmarLimpar();
+      }
+    }, 3000);
+    return btnLimpar;
+  })();
+}
+
 // ─── LIMPAR CARRINHO ───
 function limparCarrinho() {
   carrinho = [];
+  salvarCarrinho();
   atualizarBadge();
   renderCarrinho();
   document.querySelectorAll('.btn-add-carrinho').forEach(btn => {
@@ -1543,6 +1627,14 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2200);
 }
 
+// ─── FECHAR COM ESC ───
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    const ov = document.getElementById('carrinho-overlay');
+    if (ov && ov.classList.contains('ativo')) fecharCarrinho();
+  }
+});
+
 // ─── REVEAL ───
 const io = new IntersectionObserver(entries => {
   entries.forEach(e => {
@@ -1554,6 +1646,7 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
 // ─── INIT ───
 renderGrid('todos');
+atualizarBadge();
 
 document.getElementById('ano').textContent = new Date().getFullYear();
 
