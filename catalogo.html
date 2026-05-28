@@ -33,6 +33,204 @@
   --text-muted: #b8b4ab;
 }
 
+/* ─── MODO CLARO ─── */
+body.light {
+  --bg: #f5f1ea;
+  --bg-2: #ede8df;
+  --bg-3: #e4ddd2;
+  --surface: rgba(0,0,0,0.03);
+  --surface-hover: rgba(180,140,20,0.07);
+  --border: rgba(0,0,0,0.07);
+  --border-gold: rgba(180,140,20,0.28);
+  --text-main: #1a1208;
+  --text-muted: #6b6050;
+  --line: rgba(180,140,20,0.2);
+  --gold: #b8920e;
+  --gold-2: #8a6a00;
+  --gold-deep: #6b4f00;
+}
+
+body.light::before {
+  background:
+    radial-gradient(1200px 600px at 20% -10%, rgba(212,175,55,0.08), transparent 70%),
+    radial-gradient(900px 500px at 100% 20%, rgba(212,175,55,0.05), transparent 60%),
+    radial-gradient(800px 600px at 50% 110%, rgba(212,175,55,0.06), transparent 60%),
+    var(--bg);
+}
+
+body.light::after {
+  background-image:
+    linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+}
+
+body.light .catalogo-nav {
+  background: rgba(245,241,234,0.88);
+  border-bottom-color: rgba(180,140,20,0.18);
+}
+
+body.light .produto-card {
+  background: linear-gradient(145deg, rgba(255,255,255,0.85), rgba(255,255,255,0.6));
+  border-color: rgba(180,140,20,0.22);
+}
+
+body.light .produto-card:hover {
+  border-color: rgba(180,140,20,0.55);
+  box-shadow: 0 24px 60px -12px rgba(180,140,20,0.18);
+}
+
+body.light .filtro-btn {
+  color: var(--text-muted);
+  border-color: rgba(180,140,20,0.25);
+}
+
+body.light .filtro-btn:hover,
+body.light .filtro-btn.ativo {
+  background: rgba(180,140,20,0.1);
+  border-color: var(--gold);
+  color: var(--gold-2);
+}
+
+body.light .carrinho-overlay { background: rgba(0,0,0,0.55); }
+
+body.light .carrinho-painel {
+  background: linear-gradient(160deg, #f0ece2, #e8e2d6);
+  border-left-color: rgba(180,140,20,0.25);
+}
+
+body.light .carrinho-head { border-bottom-color: rgba(180,140,20,0.15); }
+body.light .carrinho-foot { border-top-color: rgba(180,140,20,0.15); background: rgba(0,0,0,0.04); }
+body.light .carrinho-foot .label { color: var(--text-muted); }
+body.light .carrinho-foot .valor { color: var(--text-main); }
+
+body.light .item-emoji-mini {
+  background: rgba(180,140,20,0.08);
+  border-color: rgba(180,140,20,0.2);
+}
+
+body.light .item-nome { color: var(--text-main); }
+body.light .item-cat { color: var(--gold); }
+body.light .item-preco { color: var(--gold-2); }
+
+body.light .qty-btn {
+  border-color: rgba(180,140,20,0.25);
+  color: var(--gold);
+}
+
+body.light .qty-btn:hover { background: rgba(180,140,20,0.12); }
+
+body.light .btn-add-carrinho {
+  color: var(--gold-2);
+  border-color: rgba(180,140,20,0.3);
+}
+
+body.light .btn-add-carrinho:hover {
+  background: rgba(180,140,20,0.1);
+  border-color: var(--gold);
+}
+
+body.light .btn-fechar {
+  border-color: rgba(0,0,0,0.1);
+  color: var(--text-muted);
+}
+
+body.light .btn-fechar:hover { border-color: var(--gold); color: var(--gold); }
+
+body.light .btn-limpar {
+  border-color: rgba(200,50,50,0.2);
+  color: rgba(180,30,30,0.55);
+}
+
+body.light .btn-limpar:hover {
+  border-color: rgba(200,50,50,0.5);
+  color: rgba(180,30,30,0.85);
+  background: rgba(200,50,50,0.05);
+}
+
+body.light .toast {
+  background: linear-gradient(135deg, #f5f1ea, #ede8df);
+  border-color: var(--gold);
+  color: var(--gold-2);
+}
+
+body.light .carrinho-vazio { color: var(--text-muted); }
+
+body.light footer.elegant-footer {
+  background-color: #ede8df;
+  border-top-color: rgba(180,140,20,0.18);
+}
+
+body.light .footer-col p { color: var(--text-muted); }
+body.light .footer-links-list li a { color: var(--text-muted); }
+body.light .footer-links-list li a:hover { color: var(--gold); }
+body.light .footer-bottom { color: var(--text-muted); }
+
+body.light .footer-social-icons a {
+  border-color: rgba(180,140,20,0.25);
+  color: var(--gold);
+}
+
+body.light .nav-cart-btn {
+  background: rgba(180,140,20,0.08);
+  border-color: rgba(180,140,20,0.25);
+  color: var(--gold-2);
+}
+
+body.light .nav-cart-btn:hover {
+  background: rgba(180,140,20,0.15);
+  border-color: var(--gold);
+}
+
+body.light .nav-cart-btn i { color: var(--gold); }
+
+body.light .catalogo-header .tag {
+  border-color: rgba(180,140,20,0.28);
+  color: var(--gold);
+  background: rgba(180,140,20,0.06);
+}
+
+body.light .produto-preco-valor {
+  background: linear-gradient(135deg, #8a6a00, #b8920e);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+body.light .badge-top {
+  background: linear-gradient(135deg, #d4af37, #a8801f);
+}
+
+body.light .lb-modal { background: rgba(0,0,0,0); }
+body.light .lb-modal.lb-ativo { background: rgba(0,0,0,0.85); }
+
+/* ─── BOTÃO TOGGLE TEMA ─── */
+.btn-tema {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border-gold);
+  background: rgba(212,175,55,0.08);
+  color: var(--gold-2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+
+.btn-tema:hover {
+  background: rgba(212,175,55,0.18);
+  border-color: var(--gold);
+  transform: rotate(20deg) scale(1.08);
+}
+
+body.light .btn-tema {
+  background: rgba(180,140,20,0.08);
+  border-color: rgba(180,140,20,0.28);
+  color: var(--gold-2);
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 
@@ -756,6 +954,100 @@ body::after {
   transform: translateX(-50%) translateY(0);
 }
 
+/* ─── LIGHTBOX ─── */
+.lb-overlay-img {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.3s ease;
+  cursor: pointer; z-index: 2;
+}
+.lb-overlay-img .lb-icon {
+  opacity: 0; transform: scale(0.7);
+  transition: all 0.3s ease;
+  color: #fff; font-size: 2rem;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+}
+.produto-img:hover .lb-overlay-img { background: rgba(0,0,0,0.42); }
+.produto-img:hover .lb-overlay-img .lb-icon { opacity: 1; transform: scale(1); }
+
+.lb-modal {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(0,0,0,0);
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none;
+  transition: background 0.35s ease;
+}
+.lb-modal.lb-ativo {
+  background: rgba(0,0,0,0.92);
+  pointer-events: all;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.lb-box {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center; gap: 18px;
+  opacity: 0; transform: scale(0.88);
+  transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
+  max-width: min(90vw, 680px);
+  padding: 0 16px;
+}
+.lb-modal.lb-ativo .lb-box { opacity: 1; transform: scale(1); }
+.lb-img-principal {
+  width: 100%; max-height: 72vh; object-fit: contain;
+  border-radius: 16px;
+  border: 1px solid rgba(212,175,55,0.25);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.7);
+  display: block;
+}
+.lb-info-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%; gap: 16px;
+}
+.lb-nome {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem; font-weight: 700; color: #fcfbfa;
+}
+.lb-cat {
+  font-size: 0.68rem; font-weight: 600; letter-spacing: 0.15em;
+  text-transform: uppercase; color: #d4af37;
+}
+.lb-acoes { display: flex; gap: 10px; flex-shrink: 0; }
+.lb-btn-w {
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: #fff;
+  background: linear-gradient(135deg, #25d366, #128c7e);
+  border: none; padding: 9px 16px; border-radius: 30px;
+  cursor: pointer; display: flex; align-items: center; gap: 7px;
+  transition: all 0.3s ease; white-space: nowrap;
+}
+.lb-btn-w:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(37,211,102,0.4); }
+.lb-btn-c {
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: #f5d97a;
+  background: transparent; border: 1px solid rgba(212,175,55,0.4);
+  padding: 9px 16px; border-radius: 30px;
+  cursor: pointer; display: flex; align-items: center; gap: 7px;
+  transition: all 0.3s ease; white-space: nowrap;
+}
+.lb-btn-c:hover { background: rgba(212,175,55,0.15); border-color: #d4af37; transform: scale(1.05); }
+.lb-fechar {
+  position: fixed; top: 20px; right: 24px;
+  width: 42px; height: 42px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.08);
+  color: #fff; font-size: 1rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s ease; z-index: 501;
+}
+.lb-fechar:hover { background: rgba(212,175,55,0.2); border-color: #d4af37; color: #f5d97a; transform: scale(1.1); }
+.lb-dica { font-size: 0.72rem; color: rgba(255,255,255,0.3); letter-spacing: 0.08em; text-align: center; }
+@media (max-width: 600px) {
+  .lb-info-bar { flex-direction: column; align-items: flex-start; }
+  .lb-acoes { width: 100%; }
+  .lb-btn-w, .lb-btn-c { flex: 1; justify-content: center; }
+}
+
 /* ─── ANIMAÇÃO REVEAL ─── */
 .reveal {
   opacity: 0;
@@ -1044,11 +1336,16 @@ footer.elegant-footer {
       <img src="https://fabianaju.github.io/otica-reserva-do-iguacu/logo.jpeg" alt="Óticas Precisão"/>
       <span>Óticas Precisão <span class="gold-text">Virmond</span></span>
     </a>
-    <button class="nav-cart-btn" onclick="abrirCarrinho()">
-      <i class="fas fa-shopping-bag"></i>
-      <span class="cart-label">Carrinho</span>
-      <span class="nav-cart-badge" id="nav-cart-badge">0</span>
-    </button>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="btn-tema" id="btn-tema" onclick="toggleTema()" title="Alternar tema" aria-label="Alternar entre modo claro e escuro">
+        <i class="fas fa-moon" id="tema-icon"></i>
+      </button>
+      <button class="nav-cart-btn" onclick="abrirCarrinho()">
+        <i class="fas fa-shopping-bag"></i>
+        <span class="cart-label">Carrinho</span>
+        <span class="nav-cart-badge" id="nav-cart-badge">0</span>
+      </button>
+    </div>
   </div>
 </nav>
 
@@ -1127,6 +1424,25 @@ footer.elegant-footer {
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
+
+<!-- ─── LIGHTBOX ─── -->
+<div class="lb-modal" id="lb-modal" onclick="lbFecharFora(event)">
+  <button class="lb-fechar" onclick="lbFechar()"><i class="fas fa-times"></i></button>
+  <div class="lb-box">
+    <img class="lb-img-principal" id="lb-img" src="" alt="">
+    <div class="lb-info-bar">
+      <div>
+        <div class="lb-cat" id="lb-cat"></div>
+        <div class="lb-nome" id="lb-nome"></div>
+      </div>
+      <div class="lb-acoes">
+        <button class="lb-btn-w" id="lb-btn-w"><i class="fab fa-whatsapp"></i> Comprar</button>
+        <button class="lb-btn-c" id="lb-btn-c"><i class="fas fa-plus"></i> Carrinho</button>
+      </div>
+    </div>
+    <div class="lb-dica"><i class="fas fa-keyboard" style="margin-right:5px;"></i>Pressione ESC para fechar</div>
+  </div>
+</div>
 
 <footer class="elegant-footer">
   <div class="container">
@@ -1373,8 +1689,9 @@ function renderGrid(cat) {
     return `
     <div class="produto-card reveal" data-id="${p.id}">
       ${p.topVendido ? `<span class="badge-top"><i class="fas fa-fire"></i> Mais Vendido</span>` : ''}
-      <div class="produto-img">
+      <div class="produto-img" style="cursor:pointer;" onclick="lbAbrir(${p.id})">
         ${imgHtml}
+        <div class="lb-overlay-img"><i class="fas fa-search-plus lb-icon"></i></div>
       </div>
       <div class="produto-info">
         <div class="produto-categoria">${p.categoria}</div>
@@ -1646,6 +1963,23 @@ function enviarPedidoWhats() {
   window.open(`https://wa.me/5542998224827?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
+// ─── TEMA CLARO / ESCURO ───
+function toggleTema() {
+  const claro = document.body.classList.toggle('light');
+  const icon = document.getElementById('tema-icon');
+  icon.className = claro ? 'fas fa-sun' : 'fas fa-moon';
+  localStorage.setItem('otica_tema', claro ? 'light' : 'dark');
+}
+
+function initTema() {
+  const salvo = localStorage.getItem('otica_tema');
+  const prefereClaro = window.matchMedia('(prefers-color-scheme: light)').matches;
+  if (salvo === 'light' || (!salvo && prefereClaro)) {
+    document.body.classList.add('light');
+    document.getElementById('tema-icon').className = 'fas fa-sun';
+  }
+}
+
 // ─── TOAST ───
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -1654,9 +1988,38 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2200);
 }
 
+// ─── LIGHTBOX ───
+function lbAbrir(id) {
+  const p = produtos.find(x => x.id === id);
+  if (!p || !p.imagem) return;
+  document.getElementById('lb-img').src = p.imagem;
+  document.getElementById('lb-img').alt = p.nome;
+  document.getElementById('lb-nome').textContent = p.nome;
+  document.getElementById('lb-cat').textContent = p.categoria;
+  document.getElementById('lb-btn-w').onclick = () => comprarRapido(id);
+  document.getElementById('lb-btn-c').onclick = () => { addCarrinho(id); lbFechar(); };
+  const modal = document.getElementById('lb-modal');
+  modal.style.display = 'flex';
+  requestAnimationFrame(() => modal.classList.add('lb-ativo'));
+  document.body.style.overflow = 'hidden';
+}
+
+function lbFechar() {
+  const modal = document.getElementById('lb-modal');
+  modal.classList.remove('lb-ativo');
+  setTimeout(() => { modal.style.display = 'none'; }, 350);
+  document.body.style.overflow = '';
+}
+
+function lbFecharFora(e) {
+  if (e.target === document.getElementById('lb-modal')) lbFechar();
+}
+
 // ─── FECHAR COM ESC ───
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
+    const lb = document.getElementById('lb-modal');
+    if (lb && lb.classList.contains('lb-ativo')) { lbFechar(); return; }
     const ov = document.getElementById('carrinho-overlay');
     if (ov && ov.classList.contains('ativo')) fecharCarrinho();
   }
@@ -1674,6 +2037,8 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 // ─── INIT ───
 renderGrid('todos');
 atualizarBadge();
+initTema();
+initTema();
 
 document.getElementById('ano').textContent = new Date().getFullYear();
 
