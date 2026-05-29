@@ -1536,6 +1536,24 @@ const produtos = [
     topVendido: false
   },
   {
+    id: 29,
+    nome: "Ray-Ban Erika Marrom",
+    categoria: "Solar",
+    desc: "Modelo Erika com armação arredondada em acetato marrom fosco e lentes âmbar. Clássico e sofisticado, proteção UV400 com lente G-15. Estilo atemporal para o dia a dia.",
+    emoji: "🕶️",
+    imagem: "https://raw.githubusercontent.com/Fabianaju/oticaprecisaovirmond/main/oculosdesol4.png",
+    topVendido: false
+  },
+  {
+    id: 30,
+    nome: "Ray-Ban Erika Tartaruga",
+    categoria: "Solar",
+    desc: "Modelo Erika com armação arredondada em acetato estampado tartaruga e lentes degradê marrom. Visual fashion e moderno, proteção UV400 com lente G-15.",
+    emoji: "🕶️",
+    imagem: "https://raw.githubusercontent.com/Fabianaju/oticaprecisaovirmond/main/oculosdesol3.png",
+    topVendido: false
+  },
+  {
     id: 18,
     nome: "Limpa Lentes",
     categoria: "Acessórios",
@@ -1800,6 +1818,7 @@ function comprarRapido(id) {
   const msg = `Olá! Gostaria de saber mais sobre:\n\n` +
     `*${p.nome}*\n` +
     `Categoria: ${p.categoria}\n\n` +
+    `🖼️ Imagem do produto: ${p.imagem}\n\n` +
     `Pode me ajudar com mais informações?`;
   window.open(`https://wa.me/5542998224827?text=${encodeURIComponent(msg)}`, '_blank');
 }
