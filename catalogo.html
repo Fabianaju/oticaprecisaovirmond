@@ -1430,7 +1430,13 @@ footer.elegant-footer {
 <div class="lb-modal" id="lb-modal" onclick="lbFecharFora(event)">
   <button class="lb-fechar" onclick="lbFechar()"><i class="fas fa-times"></i></button>
   <div class="lb-box">
-    <img class="lb-img-principal" id="lb-img" src="" alt="">
+    <div style="position:relative; width:100%;">
+      <img class="lb-img-principal" id="lb-img" src="" alt="" style="transition:opacity 0.15s ease; width:100%; display:block;">
+      <button id="lb-prev" onclick="event.stopPropagation();lbNavegar(-1)" style="display:none;position:absolute;left:10px;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.45);border:1px solid rgba(212,175,55,0.4);color:#f5d97a;border-radius:50%;width:36px;height:36px;cursor:pointer;font-size:1rem;align-items:center;justify-content:center;"><i class="fas fa-chevron-left"></i></button>
+      <button id="lb-next" onclick="event.stopPropagation();lbNavegar(1)" style="display:none;position:absolute;right:10px;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.45);border:1px solid rgba(212,175,55,0.4);color:#f5d97a;border-radius:50%;width:36px;height:36px;cursor:pointer;font-size:1rem;align-items:center;justify-content:center;"><i class="fas fa-chevron-right"></i></button>
+    </div>
+    <div id="lb-dots" style="display:none;justify-content:center;gap:8px;padding:10px 0 4px;"></div>
+    <style>.lb-dot{width:8px;height:8px;border-radius:50%;background:rgba(212,175,55,0.3);cursor:pointer;transition:all 0.3s;border:1px solid rgba(212,175,55,0.4);}.lb-dot-ativo{background:#d4af37;transform:scale(1.2);}</style>
     <div class="lb-info-bar">
       <div>
         <div class="lb-cat" id="lb-cat"></div>
@@ -1552,6 +1558,19 @@ const produtos = [
     desc: "Modelo Erika com armação arredondada em acetato estampado tartaruga e lentes degradê marrom. Visual fashion e moderno, proteção UV400 com lente G-15.",
     emoji: "🕶️",
     imagem: "https://oticaprecisaovirmond.vercel.app/oculosdesol3.png",
+    topVendido: false
+  },
+  {
+    id: 32,
+    nome: "Óculos Solar Quadrado Feminino",
+    categoria: "Solar",
+    desc: "Armação quadrada em metal dourado com hastes pretas e lentes degradê vinho. Estilo sofisticado e feminino — proteção UV400 completa. Modelagem geométrica que valoriza qualquer rosto.",
+    emoji: "🕶️",
+    imagem: "https://raw.githubusercontent.com/Fabianaju/oticaprecisaovirmond/main/oculosdesol5.png",
+    imagens: [
+      "https://raw.githubusercontent.com/Fabianaju/oticaprecisaovirmond/main/oculosdesol5.png",
+      "https://raw.githubusercontent.com/Fabianaju/oticaprecisaovirmond/main/oculosdesol6.png"
+    ],
     topVendido: false
   },
   {
@@ -2054,15 +2073,55 @@ function showToast(msg) {
 }
 
 // ─── LIGHTBOX ───
+let lbImagens = [];
+let lbImgIdx = 0;
+
+function lbSetImg(idx) {
+  lbImgIdx = idx;
+  const img = document.getElementById('lb-img');
+  img.style.opacity = '0';
+  setTimeout(() => {
+    img.src = lbImagens[idx];
+    img.style.opacity = '1';
+  }, 150);
+  // dots
+  document.querySelectorAll('.lb-dot').forEach((d, i) => d.classList.toggle('lb-dot-ativo', i === idx));
+}
+
+function lbNavegar(dir) {
+  const novoIdx = (lbImgIdx + dir + lbImagens.length) % lbImagens.length;
+  lbSetImg(novoIdx);
+}
+
 function lbAbrir(id) {
   const p = produtos.find(x => x.id === id);
   if (!p || !p.imagem) return;
-  document.getElementById('lb-img').src = p.imagem;
-  document.getElementById('lb-img').alt = p.nome;
+  lbImagens = p.imagens || [p.imagem];
+  lbImgIdx = 0;
+  const img = document.getElementById('lb-img');
+  img.src = lbImagens[0];
+  img.alt = p.nome;
+  img.style.opacity = '1';
   document.getElementById('lb-nome').textContent = p.nome;
   document.getElementById('lb-cat').textContent = p.categoria;
   document.getElementById('lb-btn-w').onclick = () => comprarRapido(id);
   document.getElementById('lb-btn-c').onclick = () => { addCarrinho(id); lbFechar(); };
+
+  // Dots de navegação
+  const dotsEl = document.getElementById('lb-dots');
+  if (lbImagens.length > 1) {
+    dotsEl.innerHTML = lbImagens.map((_, i) =>
+      `<span class="lb-dot ${i === 0 ? 'lb-dot-ativo' : ''}" onclick="lbSetImg(${i})"></span>`
+    ).join('');
+    dotsEl.style.display = 'flex';
+    document.getElementById('lb-prev').style.display = 'flex';
+    document.getElementById('lb-next').style.display = 'flex';
+  } else {
+    dotsEl.style.display = 'none';
+    document.getElementById('lb-prev').style.display = 'none';
+    document.getElementById('lb-next').style.display = 'none';
+  }
+
   const modal = document.getElementById('lb-modal');
   modal.style.display = 'flex';
   requestAnimationFrame(() => modal.classList.add('lb-ativo'));
